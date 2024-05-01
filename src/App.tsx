@@ -9,7 +9,7 @@ function App() {
     const [isAuth, setIsAuth] = useState<boolean>(false);
 
     useEffect(() => {
-        if (localStorage.getItem("refresh_token")) {
+        if (localStorage.getItem("access_token")) {
             setIsAuth(true);
         }
     }, []);

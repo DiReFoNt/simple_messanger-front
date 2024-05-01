@@ -46,6 +46,7 @@ const NavBar: FC = () => {
                     onClick={() => {
                         navigate("/auth/login");
                         setIsAuth(false);
+                        localStorage.removeItem("access_token");
                     }}
                 >
                     <Icons.LogOut />

@@ -70,7 +70,6 @@ const SignIn: FC = () => {
                         setTimeout(() => {
                             setShowError("none");
                         }, 6000);
-                        return false;
                     }
                 );
         } catch (error) {

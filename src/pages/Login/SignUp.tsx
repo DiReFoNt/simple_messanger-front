@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
     FormButton,
     FormError,
@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
 import { Links } from "../../router/links";
+import { AuthContext } from "../../context";
 
 type FormValues = {
     email: string;
@@ -24,11 +25,19 @@ type FormValues = {
 const SignUp = () => {
     const navigate = useNavigate();
     const { register, handleSubmit } = useForm<FormValues>();
+    const [showError, setShowError] = useState<string>("none");
+    const { isAuth, setIsAuth } = useContext(AuthContext);
+
+
+    useEffect(() => {
+        if (isAuth) {
+            navigate("/home");
+        }
+    }, [isAuth]);
+ 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
         await sendRegister(data);
     };
-
-    const [showError, setShowError] = useState<string>("none");
 
     async function sendRegister(data: {
         email: string;
@@ -53,6 +62,7 @@ const SignUp = () => {
                                 "refresh_token",
                                 `${response.data.refresh_token}`
                             );
+                            setIsAuth(true);
                         }
                     },
                     (error) => {
