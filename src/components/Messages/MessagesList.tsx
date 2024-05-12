@@ -4,6 +4,9 @@ import { IUser } from "../../types/types";
 import { MessageItem } from "./MessageItem";
 import styled from "styled-components";
 import { InputWrapper } from "../../styles";
+import { useNavigate } from "react-router-dom";
+import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from "axios";
+import { Links } from "../../router/links";
 
 const MessageListWrapper = styled.div`
     min-width: 408px;
@@ -28,25 +31,32 @@ const ListNotFound = styled.div`
 `;
 
 const MessagesList: FC = () => {
-    const [users, setUsers] = useState<IUser[]>([
-        {
-            username: "zamazz",
-            user_id: 2,
+    const navigate = useNavigate();
+    const [users, setUsers] = useState<IUser[]>([]);
+
+    useEffect(() => {
+        fetchUsers();
+    }, []);
+
+    const token = localStorage.getItem("access_token");
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
         },
-        {
-            username: "Oleksii",
-            user_id: 3,
-        },
-        {
-            username: "Alex",
-            user_id: 4,
-        },
-    ]);
+    };
+
+    const fetchUsers = async () => {
+        await axios
+            .get(Links.usersMessenges, config)
+            .then((res) => {
+                setUsers(res.data);
+            })
+            .catch((err) => alert("error"));
+    };
 
     const [searchResult, setSearchResult] = useState<IUser[]>([]);
 
     const [searchQuery, setSearchQuery] = useState<string>("");
-
 
     const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
@@ -55,7 +65,6 @@ const MessagesList: FC = () => {
             filteredResults = users;
         } else {
             filteredResults = users.filter((user) => {
-                console.log(user, searchQuery);
                 return user.username
                     .toLowerCase()
                     .startsWith(e.target.value.toLowerCase());
@@ -85,8 +94,9 @@ const MessagesList: FC = () => {
                                     key={user.user_id}
                                     user={user}
                                     onClick={() => {
-                                        console.log(
-                                            `user click ${user.user_id}`
+                                        navigate(
+                                            `/home/private/${user.username}`,
+                                            { replace: true }
                                         );
                                     }}
                                 ></MessageItem>

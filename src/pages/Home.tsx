@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import { MessagesList, NavBar, SignIn } from "../components";
 import ChatList from "../components/Chat/ChatList";
 import styled from "styled-components";
@@ -28,11 +28,12 @@ const NoChatDiv = styled.div`
     border-radius: 40px;
 `;
 
-const Home = () => {
-    const navigate = useNavigate();
-    const [isSelectChat, setIsSelectChat] = useState<boolean>(false);
-    const { isAuth, setIsAuth } = useContext(AuthContext);
+interface HomeProps {
+    isSelectChat: boolean;
+}
 
+const Home: FC<HomeProps> = ({ isSelectChat }) => {
+    const { isAuth, setIsAuth } = useContext(AuthContext);
 
     return (
         <div>

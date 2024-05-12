@@ -3,9 +3,12 @@ import List from "../List";
 import ChatItem from "./ChatItem";
 import styled from "styled-components";
 import { IChatPrivate } from "../../types/types";
+import { useParams } from "react-router-dom";
+import { Icons } from "../../assets";
 
 const ChatListWrapper = styled.div`
     width: 100%;
+    position: relative;
 `;
 
 const ChatListHeader = styled.div`
@@ -22,82 +25,111 @@ const ChatListHeader = styled.div`
 
 const ChatListHeaderUser = styled.div``;
 
+const ChatListHeaderStatus = styled.div`
+    color: green;
+`;
+
 const ChatListHeaderName = styled.div`
     font-weight: 500;
     font-size: 20px;
     margin-bottom: 10px;
 `;
 
+const ChatForm = styled.form`
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 70px;
+    background-color: #f4f4f7;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    padding: 10px 20px;
+`;
+
+const ChatFormInput = styled.input`
+    width: 100%;
+    padding: 6px;
+    background-color: #f4f4f7;
+    border: none;
+    outline: none;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 73%;
+    &::-webkit-input-placeholder {
+        color: #747c92;
+    }
+`;
+
+const ChatFormButton = styled.button`
+    width: 30px;
+    height: 30px;
+    margin-left: 10px;
+    background-color: #f4f4f7;
+    border: none;
+    cursor: pointer;
+`;
+
 const ChatList: FC = () => {
-    const [dataChat, setDataChat] = useState<IChatPrivate>({
-        page: 1,
-        perPage: 20,
-        total: 26,
-        messages: [
-            {
-                private_msg_id: 26,
-                msg: "Anytime! Let's make magic happen",
-                time: "2024-04-06T11:08:03.632Z",
-                sender: {
-                    user_id: 3,
-                    username: "Oleksii",
-                },
-                receiver: {
-                    user_id: 2,
-                    username: "zamazz",
-                },
-            },
-            {
-                private_msg_id: 25,
-                msg: "That sounds great! I agree, let's focus on the design first. I have a few ideas for the layout and color scheme.",
-                time: "2024-04-06T11:08:03.479Z",
-                sender: {
-                    user_id: 3,
-                    username: "Oleksii",
-                },
-                receiver: {
-                    user_id: 2,
-                    username: "zamazz",
-                },
-            },
-        ],
-    });
-
-
+    const params = useParams();
+    const [dataChat, setDataChat] = useState<IChatPrivate | null>(null);
 
     return (
         <ChatListWrapper>
             <ChatListHeader>
                 <ChatListHeaderUser>
-                    <ChatListHeaderName>
-                        {dataChat.messages[0].sender.username}
-                    </ChatListHeaderName>
-                    <div>Online</div>
+                    <ChatListHeaderName>{params.username}</ChatListHeaderName>
+                    <ChatListHeaderStatus>Online</ChatListHeaderStatus>
                 </ChatListHeaderUser>
             </ChatListHeader>
-            <List
+            {!!dataChat ? (
+                <List
+                    items={dataChat.messages}
+                    renderItem={(msg) => {
+                        return (
+                            <ChatItem
+                                msg={msg.msg}
+                                time={msg.time}
+                                // user={params.username}
+                                key={msg.private_msg_id}
+                            />
+                        );
+                    }}
+                ></List>
+            ) : (
+                <div></div>
+            )}
+            {/* <List
                 items={dataChat.messages}
                 renderItem={(msg) => {
                     return (
                         <ChatItem
                             msg={msg.msg}
                             time={msg.time}
-                            user={msg.sender}
+                            // user={params.username}
                             key={msg.private_msg_id}
                         />
                     );
                 }}
-            ></List>
-            {/* <form>
-                <input
+            ></List> */}
+            <ChatForm>
+                <ChatFormInput
                     type="text"
-                    onChange={(e) => {
-                        setMessage(e.target.value);
-                    }}
-                    value={message}
+                    onChange={(e) => {}}
+                    value={""}
+                    placeholder="Write a message..."
                 />
-                <button onSubmit={sendMessage}>Send</button>
-            </form> */}
+                <ChatFormButton
+                    onClick={(e) => {
+                        e.preventDefault();
+                        console.log("send msg");
+                    }}
+                >
+                    <Icons.Send />
+                </ChatFormButton>
+            </ChatForm>
         </ChatListWrapper>
     );
 };

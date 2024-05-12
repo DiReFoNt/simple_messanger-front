@@ -1,12 +1,5 @@
 import React, { FC } from "react";
-import { IUser } from "../../types/types";
 import styled from "styled-components";
-
-interface ChatItemProps {
-    msg: string;
-    time: string;
-    user: IUser;
-}
 
 const ChatItemWrapper = styled.div`
     margin: 36px;
@@ -27,13 +20,19 @@ const ChatItemUserName = styled.div`
 `;
 
 const ChatItemMsg = styled.div`
-    background-color: #f4f4f7;
+    background-color: #d4dce6;
     padding: 12px 16px;
     border-radius: 0px 25px 25px 25px;
     color: #38405f;
 `;
 
-const ChatItem: FC<ChatItemProps> = ({ msg, time, user }) => {
+interface ChatItemProps {
+    msg: string;
+    time: string;
+    // user: string | undefined;
+}
+
+const ChatItem: FC<ChatItemProps> = ({ msg, time }) => {
     const date = new Date(time);
 
     return (
@@ -42,7 +41,6 @@ const ChatItem: FC<ChatItemProps> = ({ msg, time, user }) => {
                 <div>
                     {date.getHours()}:{date.getMinutes()}
                 </div>
-                <ChatItemUserName>{user.username}</ChatItemUserName>
             </ChatItemUser>
 
             <ChatItemMsg>{msg}</ChatItemMsg>

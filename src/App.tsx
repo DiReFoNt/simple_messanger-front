@@ -4,6 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import SignUp from "./pages/Login/SignUp";
 import { AuthContext } from "./context";
+import ChatList from "./components/Chat/ChatList";
 
 function App() {
     const [isAuth, setIsAuth] = useState<boolean>(false);
@@ -18,7 +19,14 @@ function App() {
         <AuthContext.Provider value={{ isAuth, setIsAuth }}>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/home" element={<Home />} />
+                    <Route
+                        path="/home"
+                        element={<Home isSelectChat={false} />}
+                    />
+                    <Route
+                        path="/home/private/:username"
+                        element={<Home isSelectChat={true} />}
+                    />
                     <Route path="/auth/login" element={<SignIn />} />
                     <Route path="/auth/signup" element={<SignUp />} />
                     <Route path="*" element={<Navigate to="/home" replace />} />
