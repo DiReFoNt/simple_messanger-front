@@ -1,9 +1,4 @@
-import React, {
-    FC,
-    useContext,
-    useEffect,
-    useState,
-} from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -59,6 +54,16 @@ const SignIn: FC = () => {
                                 "refresh_token",
                                 `${response.data.refresh_token}`
                             );
+                            localStorage.setItem(
+                                "user_id",
+                                `${response.data.user_id}`
+                            );
+                            localStorage.setItem(
+                                "username",
+                                `${response.data.username}`
+                            );
+
+                            console.log(response);
                             setIsAuth(true);
                         }
                     },

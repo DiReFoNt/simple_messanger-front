@@ -28,13 +28,12 @@ const SignUp = () => {
     const [showError, setShowError] = useState<string>("none");
     const { isAuth, setIsAuth } = useContext(AuthContext);
 
-
     useEffect(() => {
         if (isAuth) {
             navigate("/home");
         }
     }, [isAuth]);
- 
+
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
         await sendRegister(data);
     };
@@ -62,6 +61,15 @@ const SignUp = () => {
                                 "refresh_token",
                                 `${response.data.refresh_token}`
                             );
+                            localStorage.setItem(
+                                "user_id",
+                                `${response.data.user_id}`
+                            );
+                            localStorage.setItem(
+                                "username",
+                                `${response.data.username}`
+                            );
+
                             setIsAuth(true);
                         }
                     },
@@ -69,7 +77,7 @@ const SignUp = () => {
                         setShowError("block");
                         setTimeout(() => {
                             setShowError("none");
-                        },6000);
+                        }, 6000);
                     }
                 );
         } catch (error) {

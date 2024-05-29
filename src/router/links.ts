@@ -1,9 +1,13 @@
-const login: string = "http://localhost:3000/auth/signIn";
-const reg: string = "http://localhost:3000/auth/signUp";
-const usersMessenges: string = "http://localhost:3000/ws/clients";
+const url = "http://localhost:3001";
+
+const login: string = `${url}/auth/signIn`;
+const reg: string = `${url}/auth/signUp`;
+const usersMessenges: string = `${url}/ws/clients`;
+const privateMsgHistory: string = `${url}/ws/private?receiver_id=`;
 
 export const Links = {
     login,
     reg,
     usersMessenges,
+    privateMsgHistory
 };

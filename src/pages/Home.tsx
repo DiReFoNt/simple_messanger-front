@@ -33,6 +33,12 @@ interface HomeProps {
 }
 
 const Home: FC<HomeProps> = ({ isSelectChat }) => {
+    useEffect(() => {
+        console.log(isAuth);
+    }, []);
+
+    const getToken = () => {};
+
     const { isAuth, setIsAuth } = useContext(AuthContext);
 
     return (

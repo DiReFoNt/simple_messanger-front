@@ -1,10 +1,14 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import List from "../List";
 import ChatItem from "./ChatItem";
 import styled from "styled-components";
 import { IChatPrivate } from "../../types/types";
 import { useParams } from "react-router-dom";
 import { Icons } from "../../assets";
+import { socket } from "../../socket";
+import { config, tokenAccess } from "../../router/config";
+import axios from "axios";
+import { Links } from "../../router/links";
 
 const ChatListWrapper = styled.div`
     width: 100%;
@@ -39,6 +43,7 @@ const ChatForm = styled.form`
     position: absolute;
     bottom: 0;
     width: 100%;
+    min-width: 275px;
     height: 70px;
     background-color: #f4f4f7;
     display: flex;
@@ -75,6 +80,25 @@ const ChatFormButton = styled.button`
 const ChatList: FC = () => {
     const params = useParams();
     const [dataChat, setDataChat] = useState<IChatPrivate | null>(null);
+    const [msg, setMsg] = useState<string>();
+    const receiver_id = localStorage.getItem("receiver_id");
+
+    useEffect(() => {
+        async function fetch() {
+            const res = await fetchMsgData();
+        }
+        fetch();
+    }, [params]);
+
+    const fetchMsgData = async () => {
+        await axios
+            .get(Links.privateMsgHistory + receiver_id, config)
+            .then((res) => {
+                setDataChat(res.data);
+                console.log(dataChat);
+            })
+            .catch((err) => alert("error"));
+    };
 
     return (
         <ChatListWrapper>
@@ -85,46 +109,40 @@ const ChatList: FC = () => {
                 </ChatListHeaderUser>
             </ChatListHeader>
             {!!dataChat ? (
-                <List
-                    items={dataChat.messages}
-                    renderItem={(msg) => {
+                <div style={{ overflow: "auto", maxHeight: "85%"}}>
+                    {dataChat.messages.reverse().map((msg) => {
                         return (
                             <ChatItem
                                 msg={msg.msg}
                                 time={msg.time}
-                                // user={params.username}
-                                key={msg.private_msg_id}
+                                users={msg}
                             />
                         );
-                    }}
-                ></List>
+                    })}
+                </div>
             ) : (
                 <div></div>
             )}
-            {/* <List
-                items={dataChat.messages}
-                renderItem={(msg) => {
-                    return (
-                        <ChatItem
-                            msg={msg.msg}
-                            time={msg.time}
-                            // user={params.username}
-                            key={msg.private_msg_id}
-                        />
-                    );
-                }}
-            ></List> */}
             <ChatForm>
                 <ChatFormInput
                     type="text"
-                    onChange={(e) => {}}
-                    value={""}
+                    onChange={(e) => {
+                        setMsg(e.target.value);
+                    }}
+                    value={msg}
                     placeholder="Write a message..."
                 />
                 <ChatFormButton
                     onClick={(e) => {
                         e.preventDefault();
-                        console.log("send msg");
+                        const msgData = JSON.stringify({
+                            event: "private_message",
+                            data: {
+                                msg: msg,
+                                receiver_id: receiver_id,
+                            },
+                        });
+                        socket.send(msgData);
                     }}
                 >
                     <Icons.Send />

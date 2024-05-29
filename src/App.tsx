@@ -5,6 +5,8 @@ import Home from "./pages/Home";
 import SignUp from "./pages/Login/SignUp";
 import { AuthContext } from "./context";
 import ChatList from "./components/Chat/ChatList";
+import { socket } from "./socket";
+import { tokenAccess } from "./router/config";
 
 function App() {
     const [isAuth, setIsAuth] = useState<boolean>(false);
@@ -20,6 +22,10 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route
+                        path="*"
+                        element={<Navigate to="/auth/login" replace />}
+                    />
+                    <Route
                         path="/home"
                         element={<Home isSelectChat={false} />}
                     />
@@ -29,7 +35,6 @@ function App() {
                     />
                     <Route path="/auth/login" element={<SignIn />} />
                     <Route path="/auth/signup" element={<SignUp />} />
-                    <Route path="*" element={<Navigate to="/home" replace />} />
                 </Routes>
             </BrowserRouter>
         </AuthContext.Provider>

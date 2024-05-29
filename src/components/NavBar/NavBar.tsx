@@ -33,7 +33,7 @@ const NavBar: FC = () => {
 
     return (
         <NavBarWrapper>
-            <Title>USERNAME</Title>
+            <Title>{localStorage.getItem('username')}</Title>
             <Content>
                 <ButtonWrapper
                     onClick={() => {
@@ -46,6 +46,7 @@ const NavBar: FC = () => {
                     onClick={() => {
                         navigate("/auth/login");
                         setIsAuth(false);
+                        localStorage.removeItem("auth");
                         localStorage.removeItem("access_token");
                     }}
                 >

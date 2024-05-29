@@ -7,6 +7,7 @@ import { InputWrapper } from "../../styles";
 import { useNavigate } from "react-router-dom";
 import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from "axios";
 import { Links } from "../../router/links";
+import { config } from "../../router/config";
 
 const MessageListWrapper = styled.div`
     min-width: 408px;
@@ -33,23 +34,22 @@ const ListNotFound = styled.div`
 const MessagesList: FC = () => {
     const navigate = useNavigate();
     const [users, setUsers] = useState<IUser[]>([]);
+    const userPersonal = localStorage.getItem("username");
 
     useEffect(() => {
-        fetchUsers();
+        async function fetch() {
+            const res = await fetchUsers();
+        }
+        fetch();
     }, []);
-
-    const token = localStorage.getItem("access_token");
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
 
     const fetchUsers = async () => {
         await axios
             .get(Links.usersMessenges, config)
             .then((res) => {
                 setUsers(res.data);
+                localStorage.setItem("users", JSON.stringify(res.data))
+
             })
             .catch((err) => alert("error"));
     };
@@ -89,6 +89,9 @@ const MessagesList: FC = () => {
                     <List
                         items={searchResult.length === 0 ? users : searchResult}
                         renderItem={(user: IUser) => {
+                            if (user.username === userPersonal) {
+                                return;
+                            }
                             return (
                                 <MessageItem
                                     key={user.user_id}
@@ -98,6 +101,7 @@ const MessagesList: FC = () => {
                                             `/home/private/${user.username}`,
                                             { replace: true }
                                         );
+                                        localStorage.setItem('receiver_id', `${user.user_id}`)
                                     }}
                                 ></MessageItem>
                             );

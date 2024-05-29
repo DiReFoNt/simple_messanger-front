@@ -1,8 +1,11 @@
-import { io } from "socket.io-client";
+import { tokenAccess } from "./router/config";
 
-export const socket = io.connect("ws://localhost:3000", {
-    // extraHeaders: {
-    //     Authorization: "",
-    // },
-    autoConnect: false,
-});
+export let socket = new WebSocket("ws://localhost:3001");
+
+socket.onopen = function (e) {
+    const message = JSON.stringify({
+        event: "auth",
+        data: tokenAccess,
+    });
+    socket.send(message);
+};
