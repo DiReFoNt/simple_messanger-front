@@ -37,8 +37,6 @@ const Home: FC<HomeProps> = ({ isSelectChat }) => {
         console.log(isAuth);
     }, []);
 
-    const getToken = () => {};
-
     const { isAuth, setIsAuth } = useContext(AuthContext);
 
     return (

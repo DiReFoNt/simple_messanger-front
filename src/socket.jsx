@@ -1,11 +1,3 @@
-import { tokenAccess } from "./router/config";
+import { tokenAccess } from "./assets/Global/UserData";
 
 export let socket = new WebSocket("ws://localhost:3001");
-
-socket.onopen = function (e) {
-    const message = JSON.stringify({
-        event: "auth",
-        data: tokenAccess,
-    });
-    socket.send(message);
-};

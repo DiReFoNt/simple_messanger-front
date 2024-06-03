@@ -1,6 +1,8 @@
 export interface IUser {
     username: string;
     user_id: number;
+    avatar: string | null;
+    email: string;
 }
 
 export interface IMessagePrivate {

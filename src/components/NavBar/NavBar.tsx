@@ -4,6 +4,8 @@ import { Icons } from "../../assets";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context";
+import { socket } from "../../socket";
+import { IUser } from "../../types/types";
 
 const NavBarWrapper = styled.div`
     min-width: 112px;
@@ -29,11 +31,13 @@ const Content = styled.div`
 
 const NavBar: FC = () => {
     const navigate = useNavigate();
+    const userPersonalId = localStorage.getItem("user_id");
+    // const userPersonal = JSON.parse(`${localStorage.getItem("users")}`).find((element:IUser) => `${element.user_id}` === userPersonalId);
     const { isAuth, setIsAuth } = useContext(AuthContext);
 
     return (
         <NavBarWrapper>
-            <Title>{localStorage.getItem('username')}</Title>
+            <Title>TEST</Title>
             <Content>
                 <ButtonWrapper
                     onClick={() => {
@@ -46,8 +50,9 @@ const NavBar: FC = () => {
                     onClick={() => {
                         navigate("/auth/login");
                         setIsAuth(false);
-                        localStorage.removeItem("auth");
-                        localStorage.removeItem("access_token");
+                        localStorage.removeItem("users");
+                        localStorage.clear();
+                        socket.close();
                     }}
                 >
                     <Icons.LogOut />

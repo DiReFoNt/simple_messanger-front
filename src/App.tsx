@@ -5,14 +5,13 @@ import Home from "./pages/Home";
 import SignUp from "./pages/Login/SignUp";
 import { AuthContext } from "./context";
 import ChatList from "./components/Chat/ChatList";
-import { socket } from "./socket";
-import { tokenAccess } from "./router/config";
+import { tokenAccess } from "./assets/Global/UserData";
 
 function App() {
     const [isAuth, setIsAuth] = useState<boolean>(false);
 
     useEffect(() => {
-        if (localStorage.getItem("access_token")) {
+        if (tokenAccess) {
             setIsAuth(true);
         }
     }, []);

@@ -6,7 +6,7 @@ import { IChatPrivate } from "../../types/types";
 import { useParams } from "react-router-dom";
 import { Icons } from "../../assets";
 import { socket } from "../../socket";
-import { config, tokenAccess } from "../../router/config";
+import { config, tokenAccess } from "../../assets/Global/UserData";
 import axios from "axios";
 import { Links } from "../../router/links";
 
@@ -85,7 +85,7 @@ const ChatList: FC = () => {
 
     useEffect(() => {
         async function fetch() {
-            const res = await fetchMsgData();
+            await fetchMsgData();
         }
         fetch();
     }, [params]);
@@ -109,21 +109,38 @@ const ChatList: FC = () => {
                 </ChatListHeaderUser>
             </ChatListHeader>
             {!!dataChat ? (
-                <div style={{ overflow: "auto", maxHeight: "85%"}}>
-                    {dataChat.messages.reverse().map((msg) => {
-                        return (
-                            <ChatItem
-                                msg={msg.msg}
-                                time={msg.time}
-                                users={msg}
-                            />
-                        );
-                    })}
+                <div style={{ overflow: "auto", maxHeight: "85%" }}>
+                    {dataChat.messages
+                        .sort((a, b) => a.private_msg_id - b.private_msg_id)
+                        .map((msg) => {
+                            return (
+                                <ChatItem
+                                    msg={msg.msg}
+                                    time={msg.time}
+                                    users={msg}
+                                    key={msg.private_msg_id}
+                                />
+                            );
+                        })}
                 </div>
             ) : (
                 <div></div>
             )}
-            <ChatForm>
+            <ChatForm
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    const msgData = JSON.stringify({
+                        event: "private_message",
+                        data: {
+                            msg: msg,
+                            receiver_id: receiver_id,
+                        },
+                    });
+                    socket.send(msgData);
+                    fetchMsgData();
+                    setMsg("");
+                }}
+            >
                 <ChatFormInput
                     type="text"
                     onChange={(e) => {
@@ -132,19 +149,7 @@ const ChatList: FC = () => {
                     value={msg}
                     placeholder="Write a message..."
                 />
-                <ChatFormButton
-                    onClick={(e) => {
-                        e.preventDefault();
-                        const msgData = JSON.stringify({
-                            event: "private_message",
-                            data: {
-                                msg: msg,
-                                receiver_id: receiver_id,
-                            },
-                        });
-                        socket.send(msgData);
-                    }}
-                >
+                <ChatFormButton>
                     <Icons.Send />
                 </ChatFormButton>
             </ChatForm>

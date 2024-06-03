@@ -65,11 +65,6 @@ const SignUp = () => {
                                 "user_id",
                                 `${response.data.user_id}`
                             );
-                            localStorage.setItem(
-                                "username",
-                                `${response.data.username}`
-                            );
-
                             setIsAuth(true);
                         }
                     },

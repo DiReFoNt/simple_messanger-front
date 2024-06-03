@@ -54,7 +54,6 @@ interface ChatItemProps {
 const ChatItem: FC<ChatItemProps> = ({ msg, time, users }) => {
     const date = new Date(time);
     const user_id = Number(localStorage.getItem("user_id"));
-    // console.log(users);
 
     return (
         <ChatItemWrapper>
