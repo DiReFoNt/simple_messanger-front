@@ -1,14 +1,14 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import List from "../List";
 import ChatItem from "./ChatItem";
 import styled from "styled-components";
 import { IChatPrivate } from "../../types/types";
 import { useParams } from "react-router-dom";
 import { Icons } from "../../assets";
-import { socket } from "../../socket";
 import { config, tokenAccess } from "../../assets/Global/UserData";
 import axios from "axios";
 import { Links } from "../../router/links";
+import { sendMessage, socket } from "../../socket";
 
 const ChatListWrapper = styled.div`
     width: 100%;
@@ -77,11 +77,30 @@ const ChatFormButton = styled.button`
     cursor: pointer;
 `;
 
+const ChatListMessages = styled.div`
+    overflow: auto;
+    max-height: 85%;
+    &::-webkit-scrollbar {
+        width: 10px;
+        height: 20px;
+        background-color: red;
+    }
+    &::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        background-color: #f5f5f5;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #000000;
+        border: 2px solid #555555;
+    }
+`;
+
 const ChatList: FC = () => {
     const params = useParams();
     const [dataChat, setDataChat] = useState<IChatPrivate | null>(null);
     const [msg, setMsg] = useState<string>();
     const receiver_id = localStorage.getItem("receiver_id");
+    const chatRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         async function fetch() {
@@ -90,12 +109,23 @@ const ChatList: FC = () => {
         fetch();
     }, [params]);
 
+    useEffect(() => {
+        if (dataChat && dataChat.messages.length > 0 && chatRef.current) {
+            chatRef.current.scrollTo(0, 9999);
+        }
+    }, [dataChat]);
+
     const fetchMsgData = async () => {
         await axios
-            .get(Links.privateMsgHistory + receiver_id, config)
+            .get(Links.privateMsgHistory + receiver_id, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                        "access_token"
+                    )}`,
+                },
+            })
             .then((res) => {
                 setDataChat(res.data);
-                console.log(dataChat);
             })
             .catch((err) => alert("error"));
     };
@@ -109,7 +139,7 @@ const ChatList: FC = () => {
                 </ChatListHeaderUser>
             </ChatListHeader>
             {!!dataChat ? (
-                <div style={{ overflow: "auto", maxHeight: "85%" }}>
+                <ChatListMessages ref={chatRef}>
                     {dataChat.messages
                         .sort((a, b) => a.private_msg_id - b.private_msg_id)
                         .map((msg) => {
@@ -122,21 +152,17 @@ const ChatList: FC = () => {
                                 />
                             );
                         })}
-                </div>
+                </ChatListMessages>
             ) : (
                 <div></div>
             )}
             <ChatForm
                 onSubmit={(e) => {
                     e.preventDefault();
-                    const msgData = JSON.stringify({
-                        event: "private_message",
-                        data: {
-                            msg: msg,
-                            receiver_id: receiver_id,
-                        },
+                    sendMessage("private_message", {
+                        msg: msg,
+                        receiver_id: receiver_id,
                     });
-                    socket.send(msgData);
                     fetchMsgData();
                     setMsg("");
                 }}

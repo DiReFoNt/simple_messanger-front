@@ -4,8 +4,8 @@ import { Icons } from "../../assets";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context";
-import { socket } from "../../socket";
 import { IUser } from "../../types/types";
+import { socket } from "../../socket";
 
 const NavBarWrapper = styled.div`
     min-width: 112px;
@@ -52,7 +52,7 @@ const NavBar: FC = () => {
                         setIsAuth(false);
                         localStorage.removeItem("users");
                         localStorage.clear();
-                        socket.close();
+                        socket.close()
                     }}
                 >
                     <Icons.LogOut />

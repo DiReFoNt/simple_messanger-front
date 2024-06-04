@@ -16,7 +16,6 @@ import {
 import { Links } from "../../router/links";
 import { AuthContext } from "../../context";
 import { config, tokenAccess } from "../../assets/Global/UserData";
-import { socket } from "../../socket";
 
 type FormValues = {
     email: string;
@@ -60,15 +59,6 @@ const SignIn: FC = () => {
                                 "user_id",
                                 `${response.data.user_id}`
                             );
-                            socket.onopen = function (e) {
-                                console.log(tokenAccess);
-                                const message = JSON.stringify({
-                                    event: "auth",
-                                    data: tokenAccess,
-                                });
-                                socket.send(message);
-                                console.log("socket");
-                            };
                             setIsAuth(true);
                         }
                     },

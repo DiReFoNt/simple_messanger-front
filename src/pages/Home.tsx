@@ -1,9 +1,17 @@
-import React, { FC, useContext, useEffect, useState } from "react";
+import React, {
+    FC,
+    useContext,
+    useEffect,
+    useLayoutEffect,
+    useState,
+} from "react";
 import { MessagesList, NavBar, SignIn } from "../components";
 import ChatList from "../components/Chat/ChatList";
 import styled from "styled-components";
 import { Navigate, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context";
+import { tokenAccess } from "../assets/Global/UserData";
+import { initializeSocket } from "../socket";
 
 const AppWrapper = styled.div`
     display: flex;
@@ -33,9 +41,9 @@ interface HomeProps {
 }
 
 const Home: FC<HomeProps> = ({ isSelectChat }) => {
-    useEffect(() => {
-        console.log(isAuth);
-    }, []);
+
+    initializeSocket();
+
 
     const { isAuth, setIsAuth } = useContext(AuthContext);
 

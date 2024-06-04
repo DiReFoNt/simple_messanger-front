@@ -1,6 +1,6 @@
-export let tokenAccess: string | null = localStorage.getItem("access_token");
+export let tokenAccess: string | null = "";
 export let config = {
     headers: {
-        Authorization: `Bearer ${tokenAccess}`,
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
     },
 };

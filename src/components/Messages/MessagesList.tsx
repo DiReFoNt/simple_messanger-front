@@ -38,7 +38,17 @@ const MessagesList: FC = () => {
 
     useEffect(() => {
         async function fetch() {
-            await fetchUsers();
+            await axios
+                .get(Links.usersMessenges, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "access_token"
+                        )}`,
+                    },
+                })
+                .then((res) => {
+                    setUsers(res.data);
+                });
         }
         fetch();
     }, []);
@@ -46,13 +56,6 @@ const MessagesList: FC = () => {
     const [searchResult, setSearchResult] = useState<IUser[]>([]);
 
     const [searchQuery, setSearchQuery] = useState<string>("");
-
-    const fetchUsers = async () => {
-        await axios.get(Links.usersMessenges, config).then((res) => {
-            setUsers(res.data);
-        });
-        console.log(config);
-    };
 
     const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
