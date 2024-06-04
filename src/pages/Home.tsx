@@ -11,7 +11,7 @@ import styled from "styled-components";
 import { Navigate, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context";
 import { tokenAccess } from "../assets/Global/UserData";
-import { initializeSocket } from "../socket";
+import { initializeSocket } from "../API/socket";
 
 const AppWrapper = styled.div`
     display: flex;
@@ -41,9 +41,11 @@ interface HomeProps {
 }
 
 const Home: FC<HomeProps> = ({ isSelectChat }) => {
-
     initializeSocket();
 
+    useEffect(() => {
+        console.log(isAuth);
+    }, []);
 
     const { isAuth, setIsAuth } = useContext(AuthContext);
 

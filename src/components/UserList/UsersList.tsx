@@ -1,12 +1,12 @@
 import React, { FC, useEffect, useState } from "react";
 import List from "../List";
 import { IUser } from "../../types/types";
-import { MessageItem } from "./MessageItem";
+import { MessageItem } from "./UsersItem";
 import styled from "styled-components";
 import { InputWrapper } from "../../styles";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Links } from "../../router/links";
+import { Links } from "../../assets/Global/links";
 import { config } from "../../assets/Global/UserData";
 
 const MessageListWrapper = styled.div`
@@ -36,7 +36,7 @@ const MessagesList: FC = () => {
     const [users, setUsers] = useState<IUser[]>([]);
     const userPersonalId = localStorage.getItem("user_id");
 
-    useEffect(() => {
+    useEffect(() => { 
         async function fetch() {
             await axios
                 .get(Links.usersMessenges, {

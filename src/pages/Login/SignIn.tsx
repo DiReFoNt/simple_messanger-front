@@ -13,7 +13,7 @@ import {
     SignInWindow,
     SignInWrapper,
 } from "../../styles";
-import { Links } from "../../router/links";
+import { Links } from "../../assets/Global/links";
 import { AuthContext } from "../../context";
 import { config, tokenAccess } from "../../assets/Global/UserData";
 
@@ -32,6 +32,9 @@ const SignIn: FC = () => {
     const [showError, setShowError] = useState<string>("none");
 
     useEffect(() => {
+        if (localStorage.getItem("access_token")) {
+            setIsAuth(true);
+        }
         if (isAuth) {
             navigate("/home");
         }

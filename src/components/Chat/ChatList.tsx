@@ -7,8 +7,8 @@ import { useParams } from "react-router-dom";
 import { Icons } from "../../assets";
 import { config, tokenAccess } from "../../assets/Global/UserData";
 import axios from "axios";
-import { Links } from "../../router/links";
-import { sendMessage, socket } from "../../socket";
+import { Links } from "../../assets/Global/links";
+import { sendMessage, socket } from "../../API/socket";
 
 const ChatListWrapper = styled.div`
     width: 100%;

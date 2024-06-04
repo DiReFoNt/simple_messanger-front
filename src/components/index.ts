@@ -1,4 +1,4 @@
-import { MessagesList } from "./Messages/MessagesList";
+import { MessagesList } from "./UserList/UsersList";
 import SignIn from "../pages/Login/SignIn";
 import { NavBar } from "./NavBar/NavBar";
 

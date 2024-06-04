@@ -1,11 +1,13 @@
-import React, { FC, useContext } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import { ButtonWrapper } from "../../styles";
 import { Icons } from "../../assets";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context";
 import { IUser } from "../../types/types";
-import { socket } from "../../socket";
+import { socket } from "../../API/socket";
+import axios from "axios";
+import { Links } from "../../assets/Global/links";
 
 const NavBarWrapper = styled.div`
     min-width: 112px;
@@ -31,13 +33,29 @@ const Content = styled.div`
 
 const NavBar: FC = () => {
     const navigate = useNavigate();
-    const userPersonalId = localStorage.getItem("user_id");
-    // const userPersonal = JSON.parse(`${localStorage.getItem("users")}`).find((element:IUser) => `${element.user_id}` === userPersonalId);
     const { isAuth, setIsAuth } = useContext(AuthContext);
+    const [userPersonal, setUserPersonal] = useState<IUser>();
+
+    useEffect(() => {
+        async function fetch() {
+            await axios
+                .get(Links.personalUserData, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "access_token"
+                        )}`,
+                    },
+                })
+                .then((res) => {
+                    setUserPersonal(res.data);
+                });
+        }
+        fetch();
+    }, []);
 
     return (
         <NavBarWrapper>
-            <Title>TEST</Title>
+            <Title>{userPersonal?.username}</Title>
             <Content>
                 <ButtonWrapper
                     onClick={() => {
@@ -52,7 +70,7 @@ const NavBar: FC = () => {
                         setIsAuth(false);
                         localStorage.removeItem("users");
                         localStorage.clear();
-                        socket.close()
+                        socket.close();
                     }}
                 >
                     <Icons.LogOut />

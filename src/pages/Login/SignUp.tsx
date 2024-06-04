@@ -13,7 +13,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
-import { Links } from "../../router/links";
+import { Links } from "../../assets/Global/links";
 import { AuthContext } from "../../context";
 
 type FormValues = {
