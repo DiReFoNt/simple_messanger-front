@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { BrowserRouter } from "react-router-dom";
 
 import { AuthContext, ThemeContext } from "./context";
-import { tokenAccess } from "./assets/Global/UserData";
 import AppRouter from "./components/AppRouter";
 import { useDarkMode } from "./hooks/useDarkMode";
 import { darkTheme, lightTheme } from "./styles/themes";
@@ -13,7 +12,7 @@ function App() {
     const [theme, themeToggler] = useState<string>("light");
     const themeMode = theme === "light" ? lightTheme : darkTheme;
     useEffect(() => {
-        if (tokenAccess) {
+        if (localStorage.getItem("access_token")) {
             setIsAuth(true);
         }
     }, []);

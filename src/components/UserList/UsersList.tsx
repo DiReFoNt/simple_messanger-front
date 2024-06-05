@@ -5,9 +5,6 @@ import { MessageItem } from "./UsersItem";
 import styled from "styled-components";
 import { InputWrapper } from "../../styles";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { Links } from "../../API/links";
-import { config } from "../../assets/Global/UserData";
 import ApiService from "../../API/ApiService";
 
 const MessageListWrapper = styled.div`
