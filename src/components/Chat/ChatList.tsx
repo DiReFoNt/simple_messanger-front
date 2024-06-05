@@ -15,8 +15,8 @@ const ChatListWrapper = styled.div`
 const ChatListHeader = styled.div`
     width: 100%;
     height: 96px;
-    background-color: #f4f4f7;
-    color: #38405f;
+    background-color: ${({ theme }) => theme.chat};
+    color: ${({ theme }) => theme.text};
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -42,7 +42,10 @@ const ChatForm = styled.form`
     width: 100%;
     min-width: 275px;
     height: 70px;
-    background-color: #f4f4f7;
+    background-color: ${({ theme }) => theme.chat};
+    color: ${({ theme }) => theme.text};
+    transition: 0.3s;
+
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -54,14 +57,16 @@ const ChatForm = styled.form`
 const ChatFormInput = styled.input`
     width: 100%;
     padding: 6px;
-    background-color: #f4f4f7;
+    background-color: ${({ theme }) => theme.chat};
+    color: ${({ theme }) => theme.text};
     border: none;
     outline: none;
     font-weight: 400;
     font-size: 22px;
     line-height: 73%;
+    transition: 0.3s;
     &::-webkit-input-placeholder {
-        color: #747c92;
+        color: ${({ theme }) => theme.text};
     }
 `;
 
@@ -69,26 +74,28 @@ const ChatFormButton = styled.button`
     width: 30px;
     height: 30px;
     margin-left: 10px;
-    background-color: #f4f4f7;
+    color: ${({ theme }) => theme.text};
+
+    background-color: transparent;
     border: none;
     cursor: pointer;
 `;
 
 const ChatListMessages = styled.div`
+    background-color: ${({ theme }) => theme.chatBg};
     overflow: auto;
     max-height: 85%;
     &::-webkit-scrollbar {
         width: 10px;
-        height: 20px;
-        background-color: red;
     }
+
     &::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-        background-color: #f5f5f5;
+        background: transparent;
     }
+
     &::-webkit-scrollbar-thumb {
-        background-color: #000000;
-        border: 2px solid #555555;
+        background: #666;
+        border-radius: 5px;
     }
 `;
 

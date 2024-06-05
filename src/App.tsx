@@ -1,15 +1,17 @@
-import { MessagesList, NavBar, SignIn } from "./components";
 import { useEffect, useState } from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import Home from "./pages/Home";
-import SignUp from "./pages/Login/SignUp";
-import { AuthContext } from "./context";
-import ChatList from "./components/Chat/ChatList";
+import { BrowserRouter } from "react-router-dom";
+
+import { AuthContext, ThemeContext } from "./context";
 import { tokenAccess } from "./assets/Global/UserData";
+import AppRouter from "./components/AppRouter";
+import { useDarkMode } from "./hooks/useDarkMode";
+import { darkTheme, lightTheme } from "./styles/themes";
+import { ThemeProvider } from "styled-components";
 
 function App() {
     const [isAuth, setIsAuth] = useState<boolean>(false);
-
+    const [theme, themeToggler] = useState<string>("light");
+    const themeMode = theme === "light" ? lightTheme : darkTheme;
     useEffect(() => {
         if (tokenAccess) {
             setIsAuth(true);
@@ -18,24 +20,13 @@ function App() {
 
     return (
         <AuthContext.Provider value={{ isAuth, setIsAuth }}>
-            <BrowserRouter>
-                <Routes>
-                    <Route
-                        path="*"
-                        element={<Navigate to="/auth/login" replace />}
-                    />
-                    <Route
-                        path="/home"
-                        element={<Home isSelectChat={false} />}
-                    />
-                    <Route
-                        path="/home/private/:username"
-                        element={<Home isSelectChat={true} />}
-                    />
-                    <Route path="/auth/login" element={<SignIn />} />
-                    <Route path="/auth/signup" element={<SignUp />} />
-                </Routes>
-            </BrowserRouter>
+            <ThemeContext.Provider value={{ theme, themeToggler }}>
+                <ThemeProvider theme={themeMode}>
+                    <BrowserRouter>
+                        <AppRouter />
+                    </BrowserRouter>
+                </ThemeProvider>
+            </ThemeContext.Provider>
         </AuthContext.Provider>
     );
 }

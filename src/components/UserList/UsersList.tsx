@@ -11,20 +11,32 @@ import { config } from "../../assets/Global/UserData";
 import ApiService from "../../API/ApiService";
 
 const MessageListWrapper = styled.div`
-    min-width: 408px;
-    background-color: #f4f4f7;
+    padding: 0 15px;
+    background-color: ${({ theme }) => theme.chat};
+    color: ${({ theme }) => theme.text};
     display: flex;
     flex-direction: column;
     align-items: center;
     position: relative;
-    overflow: scroll;
-    &::-webkit-scrollbar {
-        width: 1px;
-    }
+    overflow: hidden;
+    transition: 0.3s;
 `;
 
 const ListWrapper = styled.div`
-    margin-top: 80px;
+    width: 100%;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+        width: 10px;
+    }
+    
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #666;
+        border-radius: 5px;
+    }
 `;
 
 const ListNotFound = styled.div`

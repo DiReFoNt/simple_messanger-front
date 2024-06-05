@@ -4,6 +4,8 @@ import img from "../assets/img/background.jpg";
 export const ButtonWrapper = styled.button`
     background: none;
     border: none;
+    color: ${({ theme }) => theme.text};
+
     cursor: pointer;
     &:hover {
         opacity: 0.75;
@@ -15,7 +17,7 @@ export const ButtonWrapper = styled.button`
 `;
 
 export const InputWrapper = styled.input`
-    width: 388px;
+    width: 100%;
     height: 56px;
     margin: 20px;
     border-radius: 28px;
@@ -23,7 +25,6 @@ export const InputWrapper = styled.input`
     background-color: #d4dce6;
     color: #000000;
     padding: 16px;
-    position: fixed;
     display: relative;
 
     &:focus {
@@ -145,9 +146,15 @@ interface FormErrorProps {
 export const FormError = styled.div<FormErrorProps>`
     animation: ani 0.5s;
     @keyframes ani {
-        0% {opacity: 0; top: 0px;}
-        100% {opacity: 1; top: 15px;}
-      }
+        0% {
+            opacity: 0;
+            top: 0px;
+        }
+        100% {
+            opacity: 1;
+            top: 15px;
+        }
+    }
     position: absolute;
     color: red;
     top: 15px;

@@ -1,5 +1,4 @@
 import React, { createContext } from "react";
-import { Interface } from "readline";
 
 export type ContainerProps = {
     children: React.ReactNode;
@@ -16,3 +15,18 @@ const typeAuthContextState = {
 
 export const AuthContext =
     createContext<TypeAuthContextType>(typeAuthContextState);
+
+export type ThemeProps = {
+    children: React.ReactNode;
+};
+
+type TypeThemeType = {
+    theme: string | (() => void);
+    themeToggler: React.Dispatch<React.SetStateAction<string>>;
+};
+const typeThemeState = {
+    theme: "light",
+    themeToggler: () => {},
+};
+
+export const ThemeContext = createContext<TypeThemeType>(typeThemeState);

@@ -1,8 +1,4 @@
-import React, {
-    FC,
-    useContext,
-    useEffect,
-} from "react";
+import React, { FC, useContext, useEffect } from "react";
 import { MessagesList, NavBar } from "../components";
 import ChatList from "../components/Chat/ChatList";
 import styled from "styled-components";
@@ -36,13 +32,12 @@ const NoChatDiv = styled.div`
 interface HomeProps {
     isSelectChat: boolean;
 }
+initializeSocket();
 
 const Home: FC<HomeProps> = ({ isSelectChat }) => {
-    initializeSocket();
-
     useEffect(() => {
         console.log(isAuth);
-    },);
+    });
 
     const { isAuth, setIsAuth } = useContext(AuthContext);
 
@@ -60,8 +55,7 @@ const Home: FC<HomeProps> = ({ isSelectChat }) => {
                                 Select a chat to start messaging
                             </NoChatDiv>
                         </NoChatWrapper>
-                    )}{" "}
-                    :{" "}
+                    )}
                 </AppWrapper>
             ) : (
                 <Navigate to="/auth/login" replace={true} />

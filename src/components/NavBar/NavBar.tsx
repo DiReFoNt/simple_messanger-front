@@ -3,23 +3,25 @@ import { ButtonWrapper } from "../../styles";
 import { Icons } from "../../assets";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context";
+import { AuthContext, ThemeContext } from "../../context";
 import { IUser } from "../../types/types";
 import { socket } from "../../API/socket";
 import ApiService from "../../API/ApiService";
 
 const NavBarWrapper = styled.div`
     min-width: 112px;
-    background-color: #d4dce6;
+    background-color: ${({ theme }) => theme.navBar};
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     padding-bottom: 40px;
+    transition: 0.3s;
 `;
 
 const Title = styled.div`
     margin-top: 100px;
+    color: ${({ theme }) => theme.text};
 `;
 
 const Content = styled.div`
@@ -33,6 +35,7 @@ const Content = styled.div`
 const NavBar: FC = () => {
     const navigate = useNavigate();
     const { isAuth, setIsAuth } = useContext(AuthContext);
+    const { theme, themeToggler } = useContext(ThemeContext);
     const [userPersonal, setUserPersonal] = useState<IUser>();
 
     useEffect(() => {
@@ -47,7 +50,7 @@ const NavBar: FC = () => {
             <Content>
                 <ButtonWrapper
                     onClick={() => {
-                        console.log("DarkMode");
+                        themeToggler(theme === "light" ? "dark" : "light");
                     }}
                 >
                     <Icons.DarkMode />
