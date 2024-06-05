@@ -2,15 +2,12 @@ import React, {
     FC,
     useContext,
     useEffect,
-    useLayoutEffect,
-    useState,
 } from "react";
-import { MessagesList, NavBar, SignIn } from "../components";
+import { MessagesList, NavBar } from "../components";
 import ChatList from "../components/Chat/ChatList";
 import styled from "styled-components";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { AuthContext } from "../context";
-import { tokenAccess } from "../assets/Global/UserData";
 import { initializeSocket } from "../API/socket";
 
 const AppWrapper = styled.div`
@@ -45,7 +42,7 @@ const Home: FC<HomeProps> = ({ isSelectChat }) => {
 
     useEffect(() => {
         console.log(isAuth);
-    }, []);
+    },);
 
     const { isAuth, setIsAuth } = useContext(AuthContext);
 

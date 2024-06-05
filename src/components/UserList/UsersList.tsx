@@ -6,8 +6,9 @@ import styled from "styled-components";
 import { InputWrapper } from "../../styles";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Links } from "../../assets/Global/links";
+import { Links } from "../../API/links";
 import { config } from "../../assets/Global/UserData";
+import ApiService from "../../API/ApiService";
 
 const MessageListWrapper = styled.div`
     min-width: 408px;
@@ -31,26 +32,15 @@ const ListNotFound = styled.div`
     font-size: 20px;
 `;
 
-const MessagesList: FC = () => {
+const UsersList: FC = () => {
     const navigate = useNavigate();
     const [users, setUsers] = useState<IUser[]>([]);
     const userPersonalId = localStorage.getItem("user_id");
 
-    useEffect(() => { 
-        async function fetch() {
-            await axios
-                .get(Links.usersMessenges, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem(
-                            "access_token"
-                        )}`,
-                    },
-                })
-                .then((res) => {
-                    setUsers(res.data);
-                });
-        }
-        fetch();
+    useEffect(() => {
+        ApiService.fetchUsers().then((res) => {
+            setUsers(res.data);
+        });
     }, []);
 
     const [searchResult, setSearchResult] = useState<IUser[]>([]);
@@ -121,4 +111,4 @@ const MessagesList: FC = () => {
     );
 };
 
-export { MessagesList };
+export { UsersList as MessagesList };

@@ -1,4 +1,3 @@
-import { tokenAccess } from "../assets/Global/UserData";
 
 export const socketURL = "ws://localhost:3001";
 export let socket = new WebSocket(socketURL);

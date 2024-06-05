@@ -2,11 +2,6 @@ import React, { FC } from "react";
 import { IUser } from "../../types/types";
 import styled from "styled-components";
 
-interface MessageItemProps {
-    user: IUser;
-    onClick: () => void;
-}
-
 const UserWrapper = styled.div`
     display: flex;
     justify-content: center;
@@ -25,7 +20,12 @@ const UserWrapper = styled.div`
     }
 `;
 
-const MessageItem: FC<MessageItemProps> = ({ user, onClick }) => {
+interface MessageItemProps {
+    user: IUser;
+    onClick: () => void;
+}
+
+const UsersItem: FC<MessageItemProps> = ({ user, onClick }) => {
     return (
         <UserWrapper
             onClick={() => {
@@ -37,4 +37,4 @@ const MessageItem: FC<MessageItemProps> = ({ user, onClick }) => {
     );
 };
 
-export { MessageItem };
+export { UsersItem as MessageItem };

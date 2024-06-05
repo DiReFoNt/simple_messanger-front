@@ -1,14 +1,11 @@
-import React, { FC, useEffect, useRef, useState } from "react";
-import List from "../List";
+import { FC, useEffect, useRef, useState } from "react";
 import ChatItem from "./ChatItem";
 import styled from "styled-components";
 import { IChatPrivate } from "../../types/types";
 import { useParams } from "react-router-dom";
 import { Icons } from "../../assets";
-import { config, tokenAccess } from "../../assets/Global/UserData";
-import axios from "axios";
-import { Links } from "../../assets/Global/links";
-import { sendMessage, socket } from "../../API/socket";
+import { sendMessage } from "../../API/socket";
+import ApiService from "../../API/ApiService";
 
 const ChatListWrapper = styled.div`
     width: 100%;
@@ -98,15 +95,14 @@ const ChatListMessages = styled.div`
 const ChatList: FC = () => {
     const params = useParams();
     const [dataChat, setDataChat] = useState<IChatPrivate | null>(null);
-    const [msg, setMsg] = useState<string>();
+    const [msg, setMsg] = useState<string>("");
     const receiver_id = localStorage.getItem("receiver_id");
     const chatRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        async function fetch() {
-            await fetchMsgData();
-        }
-        fetch();
+        ApiService.fetchChatMsg(receiver_id).then((res) => {
+            setDataChat(res.data);
+        });
     }, [params]);
 
     useEffect(() => {
@@ -114,21 +110,6 @@ const ChatList: FC = () => {
             chatRef.current.scrollTo(0, 9999);
         }
     }, [dataChat]);
-
-    const fetchMsgData = async () => {
-        await axios
-            .get(Links.privateMsgHistory + receiver_id, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem(
-                        "access_token"
-                    )}`,
-                },
-            })
-            .then((res) => {
-                setDataChat(res.data);
-            })
-            .catch((err) => alert("error"));
-    };
 
     return (
         <ChatListWrapper>
@@ -163,7 +144,9 @@ const ChatList: FC = () => {
                         msg: msg,
                         receiver_id: receiver_id,
                     });
-                    fetchMsgData();
+                    ApiService.fetchChatMsg(receiver_id).then((res) => {
+                        setDataChat(res.data);
+                    });
                     setMsg("");
                 }}
             >

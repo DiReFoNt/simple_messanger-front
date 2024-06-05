@@ -6,8 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context";
 import { IUser } from "../../types/types";
 import { socket } from "../../API/socket";
-import axios from "axios";
-import { Links } from "../../assets/Global/links";
+import ApiService from "../../API/ApiService";
 
 const NavBarWrapper = styled.div`
     min-width: 112px;
@@ -37,20 +36,9 @@ const NavBar: FC = () => {
     const [userPersonal, setUserPersonal] = useState<IUser>();
 
     useEffect(() => {
-        async function fetch() {
-            await axios
-                .get(Links.personalUserData, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem(
-                            "access_token"
-                        )}`,
-                    },
-                })
-                .then((res) => {
-                    setUserPersonal(res.data);
-                });
-        }
-        fetch();
+        ApiService.fetchUserPersonal().then((res) => {
+            setUserPersonal(res.data);
+        });
     }, []);
 
     return (

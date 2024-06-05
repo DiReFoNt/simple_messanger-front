@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import {
     FormButton,
     FormError,
@@ -12,9 +12,8 @@ import {
 } from "../../styles";
 import { useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
-import axios from "axios";
-import { Links } from "../../assets/Global/links";
 import { AuthContext } from "../../context";
+import ApiService from "../../API/ApiService";
 
 type FormValues = {
     email: string;
@@ -22,7 +21,7 @@ type FormValues = {
     password: string;
 };
 
-const SignUp = () => {
+const SignUp: FC = () => {
     const navigate = useNavigate();
     const { register, handleSubmit } = useForm<FormValues>();
     const [showError, setShowError] = useState<string>("none");
@@ -35,50 +34,9 @@ const SignUp = () => {
     }, [isAuth]);
 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
-        await sendRegister(data);
+        await ApiService.sendRegister(data, setIsAuth, setShowError);
     };
 
-    async function sendRegister(data: {
-        email: string;
-        username: string;
-        password: string;
-    }) {
-        try {
-            const responce = await axios
-                .post(Links.reg, {
-                    email: data.email,
-                    username: data.username,
-                    pass: data.password,
-                })
-                .then(
-                    (response) => {
-                        if (response.status === 200) {
-                            localStorage.setItem(
-                                "access_token",
-                                `${response.data.access_token}`
-                            );
-                            localStorage.setItem(
-                                "refresh_token",
-                                `${response.data.refresh_token}`
-                            );
-                            localStorage.setItem(
-                                "user_id",
-                                `${response.data.user_id}`
-                            );
-                            setIsAuth(true);
-                        }
-                    },
-                    (error) => {
-                        setShowError("block");
-                        setTimeout(() => {
-                            setShowError("none");
-                        }, 6000);
-                    }
-                );
-        } catch (error) {
-            console.log(error);
-        }
-    }
     return (
         <SignInWrapper>
             <SignInWindow>
