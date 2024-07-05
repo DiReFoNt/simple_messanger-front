@@ -27,12 +27,12 @@ const UserWrapper = styled.div`
     }
 `;
 
-interface MessageItemProps {
+interface UserItemProps {
     user: IUser;
     onClick: () => void;
 }
 
-const UsersItem: FC<MessageItemProps> = ({ user, onClick }) => {
+const UsersItem: FC<UserItemProps> = ({ user, onClick }) => {
     return (
         <UserWrapper
             onClick={() => {
@@ -44,4 +44,4 @@ const UsersItem: FC<MessageItemProps> = ({ user, onClick }) => {
     );
 };
 
-export { UsersItem as MessageItem };
+export { UsersItem};

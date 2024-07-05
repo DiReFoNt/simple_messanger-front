@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import List from "../List";
 import { IUser } from "../../types/types";
-import { MessageItem } from "./UsersItem";
+import { UsersItem } from "./UsersItem";
 import styled from "styled-components";
 import { InputWrapper } from "../../styles";
 import { useNavigate } from "react-router-dom";
@@ -94,7 +94,7 @@ const UsersList: FC = () => {
                                     return;
                                 }
                                 return (
-                                    <MessageItem
+                                    <UsersItem
                                         key={user.user_id}
                                         user={user}
                                         onClick={() => {
@@ -107,7 +107,7 @@ const UsersList: FC = () => {
                                                 `${user.user_id}`
                                             );
                                         }}
-                                    ></MessageItem>
+                                    ></UsersItem>
                                 );
                             }}
                         ></List>
